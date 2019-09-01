@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator/check");
 const config = require("config");
 const keys = config.get("SECRETKEYS");
+const validateLoginInput = require("../../validation/login");
 // @route GET api/users
 // @des test route
 
@@ -71,6 +72,13 @@ router.post(
 
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
+
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  // Check Validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
   //   Find user by email
 
   User.findOne({ email }).then(user => {
