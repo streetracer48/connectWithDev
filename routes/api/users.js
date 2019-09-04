@@ -8,6 +8,7 @@ const { check, validationResult } = require("express-validator/check");
 const config = require("config");
 const keys = config.get("SECRETKEYS");
 const validateLoginInput = require("../../validation/login");
+const passport = require("passport");
 // @route GET api/users
 // @des test route
 
@@ -109,5 +110,17 @@ router.post("/login", (req, res) => {
     });
   });
 });
+
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email
+    });
+  }
+);
 
 module.exports = router;
