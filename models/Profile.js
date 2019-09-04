@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 const ProfileSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: "users"
+    ref: "user"
   },
   handle: {
     type: String,
@@ -114,3 +114,5 @@ const ProfileSchema = new Schema({
     default: Date.now
   }
 });
+
+module.exports = Profile = mongoose.model("profile", ProfileSchema);
