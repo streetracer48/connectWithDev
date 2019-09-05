@@ -307,7 +307,26 @@ router.delete(
       foundProfile.education.splice(removeIndex, 1);
 
       await foundProfile.save();
-      res.json(foundProfile)
+      res.json(foundProfile);
+    } catch (error) {
+      res.status(500).json({ msg: "Server Error" });
+    }
+  }
+);
+
+// @route DELETE api/profile
+// @des Delete profile ,user, & posts
+// @access Private
+
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      await Profile.findOneAndDelete({ user: req.user.id });
+
+      await User.findOneAndDelete({ user: req.user.id });
+      res.status(200).json({ msg: "User Deleted" });
     } catch (error) {
       res.status(500).json({ msg: "Server Error" });
     }
