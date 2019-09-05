@@ -262,4 +262,27 @@ router.get("/user/:user_id", async (req, res) => {
   }
 });
 
+// @router api/experience/:exp_id
+// @des delete experience by id
+// private
+router.delete(
+  "/experience/:exp_id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const foundProfile = await Profile.findOne({ user: req.user.id });
+      const expIds = foundProfile.experience.map(exp => exp._id.toString());
+      const removeIndex = expIds.indexOf(req.params.exp_id);
+      if (removeIndex === -1) {
+        res.status(500).json({ msg: "Sever Errors" });
+      }
+
+      foundProfile.experience.splice(removeIndex, 1);
+      await foundProfile.save();
+
+      res.json(foundProfile);
+    } catch (error) {}
+  }
+);
+
 module.exports = router;
