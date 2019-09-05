@@ -48,4 +48,34 @@ router.post(
   }
 );
 
+// @router api/post/:id
+// @desc get post by id
+
+// Private
+
+router.get(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.id).populate("user", [
+        "name",
+        "avatar"
+      ]);
+      console.log(post);
+      if (!post) {
+        return res.status(404).json({ msg: "Post not found" });
+      }
+
+      res.json(post);
+    } catch (error) {
+      //   console.log(error);
+      if (error.kind === "ObjectId") {
+        return res.status(404).json({ msg: "Post not found" });
+      }
+      res.status(500).json({ msg: "Server error" });
+    }
+  }
+);
+
 module.exports = router;
