@@ -242,4 +242,24 @@ router.get("/", async (req, res) => {
   }
 });
 
+// @route api/profile/user/:user_id
+// @desc get user by user id
+// @access public
+
+router.get("/user/:user_id", async (req, res) => {
+  try {
+    const profile = await Profile.findOne({
+      user: req.params.user_id
+    }).populate("user", ["name", "avatar"]);
+
+    if (!profile) {
+      return res.status(404).json({ msg: "Profile not found for this user" });
+    }
+
+    res.json(profile);
+  } catch (error) {
+    res.status(500).json("Sever Errors ^^");
+  }
+});
+
 module.exports = router;
