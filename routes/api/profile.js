@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const passport = require("passport");
+const { check, validationResult } = require("express-validator/check");
 
 // Load profile model
 const Profile = require("../../models/Profile");
@@ -46,7 +46,20 @@ router.get(
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
+  [
+    check("status", "status is required")
+      .not()
+      .isEmpty(),
+    check("skills", "Skills are required")
+      .not()
+      .isEmpty()
+  ],
   async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
     const {
       company,
       website,
@@ -108,7 +121,23 @@ router.post(
 router.put(
   "/experience",
   passport.authenticate("jwt", { session: false }),
+  [
+    check("title", "Title is required")
+      .not()
+      .isEmpty(),
+    check("company", "Company is required")
+      .not()
+      .isEmpty(),
+    check("from", "from date is required")
+      .not()
+      .isEmpty()
+  ],
+
   async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(404).json({ errors: errors.array() });
+    }
     const {
       title,
       company,
@@ -116,8 +145,7 @@ router.put(
       from,
       to,
       current,
-      description,
-      status
+      description
     } = req.body;
 
     const newExp = {
@@ -141,5 +169,77 @@ router.put(
     }
   }
 );
+
+// @router PUT api/profile/education
+// @desc Add profile education
+// @access Private
+
+router.put(
+  "/education",
+  passport.authenticate("jwt", { session: false }),
+  [
+    check("school", "School is required")
+      .not()
+      .isEmpty(),
+    check("fieldofstudy", "Field of study is required")
+      .not()
+      .isEmpty(),
+    check("from", "from date is required")
+      .not()
+      .isEmpty()
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description
+    } = req.body;
+
+    const newEdu = {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description
+    };
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+      if (!profile) {
+        res.status(404).send({ msg: "User profile not found" });
+      }
+
+      profile.education.unshift(newEdu);
+      await profile.save();
+      res.json(profile);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+// @route GET api/profile
+// @des Get all profiles
+// @access Public
+
+router.get("/", async (req, res) => {
+  try {
+    const profiles = await Profile.find().populate("user", ["name", "avatar"]);
+    res.json(profiles);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server Error" });
+  }
+});
 
 module.exports = router;
