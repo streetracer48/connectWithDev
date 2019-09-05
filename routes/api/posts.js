@@ -1,11 +1,81 @@
 const express = require("express");
 const router = express.Router();
+const { check, validationResult } = require("express-validator/check");
+const passport = require("passport");
+const Post = require("../../models/Post");
+const User = require("../../models/User");
 
 // @route GET api/posts
 // @des test route
 
 // @access Public
 
-router.get("/", (req, res) => res.send("posts Route"));
+router.get("/test", (req, res) => res.send("posts Route"));
+
+// @router api/posts
+// @desc add posts
+// @Access Private
+
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  [
+    check("text", "text is required")
+      .not()
+      .isEmpty()
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const user = User.findById(req.user.id).select("-password");
+
+      const newPost = new Post({
+        text: req.body.text,
+        name: user.name,
+        avatar: user.avatar,
+        user: req.user.id
+      });
+
+      await newPost.save();
+      res.json(newPost);
+    } catch (error) {
+      res.status(500).json({ msg: "Server Errors" });
+    }
+  }
+);
+
+// @router api/post/:id
+// @desc get post by id
+
+// Private
+
+router.get(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.id).populate("user", [
+        "name",
+        "avatar"
+      ]);
+      console.log(post);
+      if (!post) {
+        return res.status(404).json({ msg: "Post not found" });
+      }
+
+      res.json(post);
+    } catch (error) {
+      //   console.log(error);
+      if (error.kind === "ObjectId") {
+        return res.status(404).json({ msg: "Post not found" });
+      }
+      res.status(500).json({ msg: "Server error" });
+    }
+  }
+);
 
 module.exports = router;
