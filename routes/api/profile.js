@@ -285,4 +285,33 @@ router.delete(
   }
 );
 
+// @router api/profile/education/:edu_id
+// @desc delete education by id
+// @ Private
+
+router.delete(
+  "/education/:edu_id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const foundProfile = await Profile.findOne({ user: req.user.id });
+
+      const eduIds = foundProfile.education.map(edu => edu._id.toString());
+
+      const removeIndex = eduIds.indexOf(req.params.edu_id);
+
+      if (removeIndex === -1) {
+        return res.status(500).json({ msg: "Server Error" });
+      }
+
+      foundProfile.education.splice(removeIndex, 1);
+
+      await foundProfile.save();
+      res.json(foundProfile)
+    } catch (error) {
+      res.status(500).json({ msg: "Server Error" });
+    }
+  }
+);
+
 module.exports = router;
