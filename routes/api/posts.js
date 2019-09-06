@@ -166,4 +166,33 @@ router.put(
   }
 );
 
+router.post(
+  "/comment/:id",
+  check("text", "the is field is required")
+    .not()
+    .isEmpty(),
+  passport.authenticate("jwt", { session: false }),
+
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      const user = await User.findById(req.user.id).select("-password");
+      const post = await Post.findById(req.params.id);
+      const newComment = {
+        text: req.body.text,
+        name: user.name,
+        avatar: user.avatar,
+        user: req.user.id
+      };
+      post.comments.unshift(newComment);
+      await post.save();
+      res.json(post);
+    } catch (error) {}
+  }
+);
+
 module.exports = router;
