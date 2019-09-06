@@ -219,7 +219,7 @@ router.delete(
       if (!comment) {
         res.status(404).json({ msg: "the comment not exists" });
       }
-       
+
       if (comment.user.toString() !== req.user.id) {
         return res.status(400).json({ msg: "you are not authorized" });
       }
@@ -236,6 +236,31 @@ router.delete(
       res.json({ msg: "Comment deleted" });
     } catch (error) {
       res.json({ error: "Server Error" });
+    }
+  }
+);
+
+router.delete(
+  "/:post_id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.post_id);
+
+      if (!post) {
+        return res.status(404).json({ msg: "the post not exists" });
+      }
+
+      if (post.user.toString() !== req.user.id) {
+        return res.status(404).json({ msg: "you are not authrized" });
+      }
+
+      await post.remove();
+
+      res.json({ msg: "the post deleted successfully" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ msg: "Server Error" });
     }
   }
 );
