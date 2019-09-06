@@ -165,6 +165,9 @@ router.put(
     }
   }
 );
+// @router api/post/comment/id
+// desc comment by post id
+// access private
 
 router.post(
   "/comment/:id",
@@ -192,6 +195,36 @@ router.post(
       await post.save();
       res.json(post);
     } catch (error) {}
+  }
+);
+
+// router api/posts/:post_id/:comment_id
+// @desc delete comment by post and comment id
+// access private
+
+router.delete(
+  "/:post_id/:comment_id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.post_id);
+
+      if (!post) {
+        return res.json(404).json({ msg: "the post not found" });
+      }
+      const removeIndex = post.comments
+        .map(comment => comment.id.toString())
+        .indexOf(req.params.comment_id);
+
+      if (removeIndex === -1) {
+        return res.status(500).json({ msg: "Server Error" });
+      }
+      post.comments.splice(removeIndex, 1);
+      await post.save();
+      res.json({ msg: "Comment deleted" });
+    } catch (error) {
+      res.json({ error: "Server Error" });
+    }
   }
 );
 
