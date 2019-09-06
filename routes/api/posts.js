@@ -212,6 +212,18 @@ router.delete(
       if (!post) {
         return res.json(404).json({ msg: "the post not found" });
       }
+
+      const comment = post.comments.find(
+        comment => comment.id === req.params.comment_id
+      );
+      if (!comment) {
+        res.status(404).json({ msg: "the comment not exists" });
+      }
+       
+      if (comment.user.toString() !== req.user.id) {
+        return res.status(400).json({ msg: "you are not authorized" });
+      }
+
       const removeIndex = post.comments
         .map(comment => comment.id.toString())
         .indexOf(req.params.comment_id);
