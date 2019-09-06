@@ -78,4 +78,56 @@ router.get(
   }
 );
 
+// @router api/post
+
+// @des get all posts
+// @access private
+
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const posts = await Post.find()
+        .populate("user", ["name", "avatar"])
+        .sort({ date: -1 });
+
+      if (!posts) {
+        return res.status(404).json({ msg: "Not found post" });
+      }
+      res.json(posts);
+    } catch (err) {
+      console.error(err.message);
+      if (err.kind === "ObjectId") {
+        return res.status(404).json({ msg: "Post not found" });
+      }
+      res.status(500).send("Server Error");
+    }
+  }
+);
+
+// @ruter api/posts/like/:id
+// @des add like in post
+// @access Private
+
+router.post(
+  "/like/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const foundpost = await Post.findById(req.params.id);
+    // check the post has already been liked
+    if (
+      foundpost.likes.filter(like => like.user.toString() === req.user.id)
+        .length > 0
+    ) {
+      return res.status(400).json({ msg: "You already liked this post" });
+    }
+
+    foundpost.likes.unshift({ user: req.user.id });
+
+    await foundpost.save();
+    res.json(foundpost);
+  }
+);
+
 module.exports = router;
