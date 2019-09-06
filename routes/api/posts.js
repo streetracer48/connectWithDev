@@ -110,7 +110,7 @@ router.get(
 // @des add like in post
 // @access Private
 
-router.post(
+router.put(
   "/like/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
@@ -127,6 +127,42 @@ router.post(
 
     await foundpost.save();
     res.json(foundpost);
+  }
+);
+
+// @router api/posts/unlike/:id
+// @desc unlike post
+// @access Private
+
+router.put(
+  "/unlike/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.id);
+
+      // check the post has been liked or not
+
+      if (
+        post.likes.filter(like => like.user.toString() === req.user.id)
+          .length === 0
+      ) {
+        return res.status(404).json({ msg: "You didn't like not yet" });
+      }
+
+      // removeIndex
+      const removeIndex = post.likes
+        .map(like => like.user.toString())
+        .indexOf(req.user.id);
+
+      post.likes.splice(removeIndex, 1);
+
+      await post.save();
+      res.json(post);
+    } catch (error) {
+      console.log(error);
+      res.status("500").json({ msg: "Server Error" });
+    }
   }
 );
 
