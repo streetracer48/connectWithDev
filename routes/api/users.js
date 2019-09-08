@@ -9,6 +9,7 @@ const config = require("config");
 const keys = config.get("SECRETKEYS");
 const validateLoginInput = require("../../validation/login");
 const passport = require("passport");
+const auth = require("../../middleware/auth");
 // @route GET api/users
 // @des test route
 
@@ -101,7 +102,7 @@ router.post("/login", (req, res) => {
         jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
           res.json({
             success: true,
-            token: "Bearer " + token
+            token
           });
         });
       } else {
@@ -111,16 +112,13 @@ router.post("/login", (req, res) => {
   });
 });
 
-router.get(
-  "/current",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    res.json({
-      id: req.user.id,
-      name: req.user.name,
-      email: req.user.email
-    });
+router.get("/current", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ msg: "Server Error" });
   }
-);
+});
 
 module.exports = router;
