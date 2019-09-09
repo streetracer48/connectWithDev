@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { loginUser } from "../../actions/authActions";
+
 class Login extends Component {
   state = {
     email: "",
@@ -8,19 +12,21 @@ class Login extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-
+    const { email, password } = this.state;
     const userData = {
-      email: this.state.email,
-      password: this.state.password
+      email,
+      password
     };
-
-    console.log(userData);
+    this.props.loginUser(userData);
   };
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
   render() {
+    if (this.props.isAuthenticated) {
+      return <Redirect to="/dashboard" />;
+    }
     return (
       <div className="login">
         <div className="container">
@@ -61,4 +67,11 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(
+  mapStateToProps,
+  { loginUser }
+)(Login);
