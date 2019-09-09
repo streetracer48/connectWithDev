@@ -1,18 +1,24 @@
-import { TEST_REDUX } from "../actions/types";
-
+import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED } from "../actions/types";
 const initialState = {
+  token: localStorage.getItem("token"),
   isAuthenticated: false,
-  user: {}
+  loading: true,
+  user: null
 };
 
 export default function(state = initialState, action) {
-  switch (action.type) {
-    case TEST_REDUX:
+  const { type, payload } = action;
+  switch (type) {
+    case USER_LOADED:
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload
+        user: payload
       };
+    case REGISTER_SUCCESS:
+      localStorage.setItem("token", payload.token);
+    case REGISTER_FAIL:
+      return {};
     default:
       return state;
   }

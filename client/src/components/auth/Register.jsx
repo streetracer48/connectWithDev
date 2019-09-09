@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { setAlert } from "../../actions/alert";
 import { registerUser } from "../../actions/authActions";
 class Register extends Component {
   state = {
@@ -9,16 +10,27 @@ class Register extends Component {
     password2: ""
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
   onSubmit = e => {
     e.preventDefault();
-    const registerData = {
-      name: this.state.name,
-      email: this.state.email,
-      passowrd: this.state.password,
-      password2: this.state.password2
-    };
 
-    this.props.registerUser(registerData);
+    if (this.state.password !== this.state.password2) {
+      this.props.setAlert("Passwords do not match", "danger");
+      console.log("password do not match");
+    } else {
+      const registerData = {
+        name: this.state.name,
+        email: this.state.email,
+        password: this.state.password,
+        password2: this.state.password2
+      };
+
+      this.props.registerUser(registerData);
+    }
   };
 
   onChange = e => {
@@ -26,6 +38,8 @@ class Register extends Component {
   };
 
   render() {
+    const { errors } = this.state;
+    console.log(errors ? errors[0] : "");
     return (
       <div className="register">
         <div className="container">
@@ -91,7 +105,12 @@ class Register extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
 export default connect(
-  null,
-  { registerUser }
+  mapStateToProps,
+  { registerUser, setAlert }
 )(Register);

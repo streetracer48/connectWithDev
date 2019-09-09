@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const { check, validationResult } = require("express-validator/check");
-
+const Auth = require("../../middleware/auth");
 // Load profile model
 const Profile = require("../../models/Profile");
 
@@ -21,7 +21,8 @@ router.get("/test", (req, res) => res.send("profile Route"));
 
 router.get(
   "/me",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  Auth,
   async (req, res) => {
     try {
       const profile = await Profile.findOne({ user: req.user.id }).populate(
@@ -45,7 +46,8 @@ router.get(
 
 router.post(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  Auth,
   [
     check("status", "status is required")
       .not()
@@ -120,7 +122,8 @@ router.post(
 
 router.put(
   "/experience",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  Auth,
   [
     check("title", "Title is required")
       .not()
@@ -176,7 +179,8 @@ router.put(
 
 router.put(
   "/education",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  Auth,
   [
     check("school", "School is required")
       .not()
@@ -267,7 +271,8 @@ router.get("/user/:user_id", async (req, res) => {
 // private
 router.delete(
   "/experience/:exp_id",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  Auth,
   async (req, res) => {
     try {
       const foundProfile = await Profile.findOne({ user: req.user.id });
@@ -291,7 +296,8 @@ router.delete(
 
 router.delete(
   "/education/:edu_id",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  Auth,
   async (req, res) => {
     try {
       const foundProfile = await Profile.findOne({ user: req.user.id });
@@ -320,7 +326,8 @@ router.delete(
 
 router.delete(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  Auth,
   async (req, res) => {
     try {
       await Profile.findOneAndDelete({ user: req.user.id });

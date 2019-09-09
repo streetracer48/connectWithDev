@@ -4,6 +4,7 @@ const { check, validationResult } = require("express-validator/check");
 const passport = require("passport");
 const Post = require("../../models/Post");
 const User = require("../../models/User");
+const Auth = require("../../middleware/auth");
 
 // @route GET api/posts
 // @des test route
@@ -18,7 +19,7 @@ router.get("/test", (req, res) => res.send("posts Route"));
 
 router.post(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  Auth,
   [
     check("text", "text is required")
       .not()
@@ -55,7 +56,8 @@ router.post(
 
 router.get(
   "/:id",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  Auth,
   async (req, res) => {
     try {
       const post = await Post.findById(req.params.id).populate("user", [
@@ -85,7 +87,8 @@ router.get(
 
 router.get(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  Auth,
   async (req, res) => {
     try {
       const posts = await Post.find()
@@ -112,7 +115,8 @@ router.get(
 
 router.put(
   "/like/:id",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  Auth,
   async (req, res) => {
     const foundpost = await Post.findById(req.params.id);
     // check the post has already been liked
@@ -136,7 +140,8 @@ router.put(
 
 router.put(
   "/unlike/:id",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  Auth,
   async (req, res) => {
     try {
       const post = await Post.findById(req.params.id);
@@ -174,7 +179,8 @@ router.post(
   check("text", "the is field is required")
     .not()
     .isEmpty(),
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  Auth,
 
   async (req, res) => {
     const errors = validationResult(req);
@@ -204,7 +210,8 @@ router.post(
 
 router.delete(
   "/:post_id/:comment_id",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  Auth,
   async (req, res) => {
     try {
       const post = await Post.findById(req.params.post_id);
@@ -242,7 +249,8 @@ router.delete(
 
 router.delete(
   "/:post_id",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  Auth,
   async (req, res) => {
     try {
       const post = await Post.findById(req.params.post_id);
