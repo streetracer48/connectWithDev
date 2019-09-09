@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-
+import { connect } from "react-redux";
+import { registerUser } from "../../actions/authActions";
 class Register extends Component {
   state = {
     name: "",
@@ -17,7 +18,7 @@ class Register extends Component {
       password2: this.state.password2
     };
 
-    console.log(registerData);
+    this.props.registerUser(registerData);
   };
 
   onChange = e => {
@@ -90,4 +91,7 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default connect(
+  null,
+  { registerUser }
+)(Register);
