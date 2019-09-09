@@ -40,7 +40,9 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
-        return res.status(400).json({ msg: "User already exists" });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "User already exist" }] });
       } else {
         const avatar = gravatar.url(email, {
           s: "200",
@@ -90,7 +92,7 @@ router.post("/login", (req, res) => {
     // check for user
 
     if (!user) {
-      return res.status(404).send("User not found");
+      return res.status(404).json({ errors: [{ msg: "User not found" }] });
     }
 
     // check password
@@ -109,7 +111,9 @@ router.post("/login", (req, res) => {
           });
         });
       } else {
-        return res.status(400).send("Password incorrect");
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Invalid Credentials" }] });
       }
     });
   });
@@ -120,7 +124,7 @@ router.get("/current", auth, async (req, res) => {
     const user = await User.findById(req.user.id).select("-password");
     res.json(user);
   } catch (error) {
-    res.status(500).json({ msg: "Server Error" });
+    res.status(500).json({ errors: [{ msg: "Server Errors" }] });
   }
 });
 
