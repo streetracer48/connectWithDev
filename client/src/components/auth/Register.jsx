@@ -6,19 +6,26 @@ class Register extends Component {
     name: "",
     email: "",
     password: "",
-    password2: ""
+    password2: "",
+    errors: {}
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    // only update chart if the data has changed
+    if (prevProps.errors !== this.props.errors) {
+      this.setState({ errors: this.props.errors });
+    }
+  }
   onSubmit = e => {
     e.preventDefault();
     const registerData = {
       name: this.state.name,
       email: this.state.email,
-      passowrd: this.state.password,
+      password: this.state.password,
       password2: this.state.password2
     };
 
-    this.props.registerUser(registerData);
+    this.props.registerUser(registerData, this.props.history);
   };
 
   onChange = e => {
@@ -26,6 +33,8 @@ class Register extends Component {
   };
 
   render() {
+    const { errors } = this.state;
+    console.log(errors.msg);
     return (
       <div className="register">
         <div className="container">
@@ -91,7 +100,12 @@ class Register extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { registerUser }
 )(Register);
