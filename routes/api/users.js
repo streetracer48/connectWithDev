@@ -56,10 +56,13 @@ router.post(
 
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
-        user
-          .save()
-          .then(user => res.json(user))
-          .catch(err => console.log(err));
+        user.save();
+        const payload = { id: user.id, name: user.name, avatar: user.avatar }; //create jwt
+
+        jwt.sign(payload, keys, { expiresIn: 360000 }, (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        });
       }
     } catch (err) {
       console.error(err.message);

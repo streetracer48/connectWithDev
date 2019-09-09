@@ -7,7 +7,14 @@ import Landing from "./layout/Landing.jsx";
 import Footer from "./layout/Footer";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
+import { loadUser } from "./actions/authActions";
+import setAuthToken from "./utils/setAuthToken";
 import "./App.css";
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+  store.dispatch(loadUser());
+}
 
 function App() {
   return (

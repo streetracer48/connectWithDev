@@ -1,31 +1,36 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { setAlert } from "../../actions/alert";
 import { registerUser } from "../../actions/authActions";
 class Register extends Component {
   state = {
     name: "",
     email: "",
     password: "",
-    password2: "",
-    errors: {}
+    password2: ""
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    // only update chart if the data has changed
-    if (prevProps.errors !== this.props.errors) {
-      this.setState({ errors: this.props.errors });
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
     }
   }
   onSubmit = e => {
     e.preventDefault();
-    const registerData = {
-      name: this.state.name,
-      email: this.state.email,
-      password: this.state.password,
-      password2: this.state.password2
-    };
 
-    this.props.registerUser(registerData, this.props.history);
+    if (this.state.password !== this.state.password2) {
+      this.props.setAlert("Passwords do not match", "danger");
+      console.log("password do not match");
+    } else {
+      const registerData = {
+        name: this.state.name,
+        email: this.state.email,
+        password: this.state.password,
+        password2: this.state.password2
+      };
+
+      this.props.registerUser(registerData);
+    }
   };
 
   onChange = e => {
@@ -34,7 +39,7 @@ class Register extends Component {
 
   render() {
     const { errors } = this.state;
-    console.log(errors.msg);
+    console.log(errors ? errors[0] : "");
     return (
       <div className="register">
         <div className="container">
@@ -107,5 +112,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { registerUser }
+  { registerUser, setAlert }
 )(Register);
