@@ -9,6 +9,7 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import { loadUser } from "./actions/authActions";
 import setAuthToken from "./utils/setAuthToken";
+import Alert from "./layout/Alert";
 import "./App.css";
 
 if (localStorage.token) {
@@ -23,8 +24,11 @@ function App() {
         <div className="App">
           <Navbar />
           <Route exact path="/" component={Landing} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Register} />
+          <section className="container">
+            <Alert />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+          </section>
           <Footer />
         </div>
       </Router>

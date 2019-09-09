@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link, Redirect } from "react-router-dom";
 import { setAlert } from "../../actions/alert";
 import { registerUser } from "../../actions/authActions";
 class Register extends Component {
@@ -10,11 +11,6 @@ class Register extends Component {
     password2: ""
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
-    }
-  }
   onSubmit = e => {
     e.preventDefault();
 
@@ -22,11 +18,11 @@ class Register extends Component {
       this.props.setAlert("Passwords do not match", "danger");
       console.log("password do not match");
     } else {
+      const { name, email, password } = this.state;
       const registerData = {
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password,
-        password2: this.state.password2
+        name,
+        email,
+        password
       };
 
       this.props.registerUser(registerData);
@@ -38,8 +34,10 @@ class Register extends Component {
   };
 
   render() {
-    const { errors } = this.state;
-    console.log(errors ? errors[0] : "");
+    if (this.props.isAuthenticated) {
+      return <Redirect to="/dashboard" />;
+    }
+    const { name, email, password, password2 } = this.state;
     return (
       <div className="register">
         <div className="container">
@@ -56,9 +54,8 @@ class Register extends Component {
                     className="form-control form-control-lg"
                     placeholder="Name"
                     name="name"
-                    value={this.state.name}
+                    value={name}
                     onChange={this.onChange}
-                    required
                   />
                 </div>
                 <div className="form-group">
@@ -67,7 +64,7 @@ class Register extends Component {
                     className="form-control form-control-lg"
                     placeholder="Email Address"
                     name="email"
-                    value={this.state.email}
+                    value={email}
                     onChange={this.onChange}
                   />
                   <small className="form-text text-muted">
@@ -81,7 +78,7 @@ class Register extends Component {
                     className="form-control form-control-lg"
                     placeholder="Password"
                     name="password"
-                    value={this.state.password}
+                    value={password}
                     onChange={this.onChange}
                   />
                 </div>
@@ -91,7 +88,7 @@ class Register extends Component {
                     className="form-control form-control-lg"
                     placeholder="Confirm Password"
                     name="password2"
-                    value={this.state.password2}
+                    value={password2}
                     onChange={this.onChange}
                   />
                 </div>
@@ -106,8 +103,7 @@ class Register extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth,
-  errors: state.errors
+  isAuthenticated: state.auth.isAuthenticated
 });
 
 export default connect(

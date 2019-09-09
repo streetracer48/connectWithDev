@@ -13,10 +13,17 @@ export default function(state = initialState, action) {
       return {
         ...state,
         isAuthenticated: true,
-        user: payload
+        user: payload,
+        loading: payload
       };
     case REGISTER_SUCCESS:
       localStorage.setItem("token", payload.token);
+      return {
+        ...state,
+        ...payload,
+        isAuthenticated: true,
+        loading: false
+      };
     case REGISTER_FAIL:
       return {};
     default:
