@@ -10,6 +10,8 @@ import Register from "./components/auth/Register";
 import { loadUser } from "./actions/authActions";
 import setAuthToken from "./utils/setAuthToken";
 import Alert from "./layout/Alert";
+import PrivateRoute from "./components/routing/PrivateRoute";
+import Dashboard from "./components/dashboard/Dashboard";
 import "./App.css";
 
 if (localStorage.token) {
@@ -28,6 +30,7 @@ function App() {
             <Alert />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
+            <PrivateRoute exact path="/dashboard" component={Dashboard} />
           </section>
           <Footer />
         </div>
