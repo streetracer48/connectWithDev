@@ -10,23 +10,26 @@ class Login extends Component {
     password: ""
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  }
+
   onSubmit = e => {
     e.preventDefault();
     const { email, password } = this.state;
-    const userData = {
-      email,
-      password
-    };
-    this.props.loginUser(userData);
+    // const userData = {
+    //   email,
+    //   password
+    // };
+    this.props.loginUser(email, password);
   };
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
   render() {
-    if (this.props.isAuthenticated) {
-      return <Redirect to="/dashboard" />;
-    }
     return (
       <div className="login">
         <div className="container">
@@ -68,7 +71,7 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  auth: state.auth
 });
 
 export default connect(

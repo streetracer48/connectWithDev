@@ -77,47 +77,58 @@ router.post(
 // @desc login User / returning JWT Token
 // @acces public
 
-router.post("/login", (req, res) => {
-  const { email, password } = req.body;
+router.post(
+  "/login",
+  [
+    check("email", "Please include a valid email")
+      .not()
+      .isEmpty(),
+    check("password", "Please enter a password ")
+      .not()
+      .isEmpty()
+  ],
+  (req, res) => {
+    const { email, password } = req.body;
 
-  const { errors, isValid } = validateLoginInput(req.body);
+    const { errors, isValid } = validateLoginInput(req.body);
 
-  // Check Validation
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
-  //   Find user by email
-
-  User.findOne({ email }).then(user => {
-    // check for user
-
-    if (!user) {
-      return res.status(404).json({ errors: [{ msg: "User not found" }] });
+    // Check Validation
+    if (!isValid) {
+      return res.status(400).json(errors);
     }
+    //   Find user by email
 
-    // check password
+    User.findOne({ email }).then(user => {
+      // check for user
 
-    bcrypt.compare(password, user.password).then(isMatch => {
-      if (isMatch) {
-        // user Matched
-
-        const payload = { id: user.id, name: user.name, avatar: user.avatar }; //create jwt
-
-        // sign Token
-        jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
-          res.json({
-            success: true,
-            token
-          });
-        });
-      } else {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid Credentials" }] });
+      if (!user) {
+        return res.status(404).json({ errors: [{ msg: "User not found" }] });
       }
+
+      // check password
+
+      bcrypt.compare(password, user.password).then(isMatch => {
+        if (isMatch) {
+          // user Matched
+
+          const payload = { id: user.id, name: user.name, avatar: user.avatar }; //create jwt
+
+          // sign Token
+          jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
+            res.json({
+              success: true,
+              token
+            });
+          });
+        } else {
+          return res
+            .status(400)
+            .json({ errors: [{ msg: "Invalid Credentials" }] });
+        }
+      });
     });
-  });
-});
+  }
+);
 
 router.get("/current", auth, async (req, res) => {
   try {

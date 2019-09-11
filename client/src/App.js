@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
@@ -7,33 +7,57 @@ import Landing from "./layout/Landing.jsx";
 import Footer from "./layout/Footer";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import { loadUser } from "./actions/authActions";
+import { setCurrentUser } from "./actions/authActions";
 import setAuthToken from "./utils/setAuthToken";
 import Alert from "./layout/Alert";
+import PrivateRoute from "./components/routing/PrivateRoute";
+import Dashboard from "./components/dashboard/Dashboard";
 import "./App.css";
+import jwt_decode from "jwt-decode";
+// Check for token
+if (localStorage.jwtToken) {
+  // Set auth token header auth
+  setAuthToken(localStorage.jwtToken);
+  // Decode token and get user info and exp
+  const decoded = jwt_decode(localStorage.jwtToken);
+  // Set user and isAuthenticated
+  store.dispatch(setCurrentUser(decoded));
 
-if (localStorage.token) {
-  setAuthToken(localStorage.token);
-  store.dispatch(loadUser());
+  // Check for expired token
+  // const currentTime = Date.now() / 1000;
+  // if (decoded.exp < currentTime) {
+  //   // Logout user
+  //   store.dispatch(logoutUser());
+  //   // Clear current Profile
+  //   // store.dispatch(clearCurrentProfile());
+  //   // Redirect to login
+  //   window.location.href = "/login";
+  // }
 }
 
-function App() {
-  return (
-    <Provider store={store}>
-      <Router>
-        <div className="App">
-          <Navbar />
-          <Route exact path="/" component={Landing} />
-          <section className="container">
-            <Alert />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />
-          </section>
-          <Footer />
-        </div>
-      </Router>
-    </Provider>
-  );
+class App extends Component {
+  componentDidMount() {
+    console.log("called");
+  }
+  render() {
+    return (
+      <Provider store={store}>
+        <Router>
+          <div className="App">
+            <Navbar />
+            <Route exact path="/" component={Landing} />
+            <section className="container">
+              <Alert />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
+              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+            </section>
+            <Footer />
+          </div>
+        </Router>
+      </Provider>
+    );
+  }
 }
 
 export default App;
