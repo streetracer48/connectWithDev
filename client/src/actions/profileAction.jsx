@@ -26,3 +26,36 @@ export const currentUserProfile = () => async dispatch => {
     });
   }
 };
+
+// create profile
+
+export const createProfile = (
+  profileData,
+  history,
+  isEdit = false
+) => async dispatch => {
+  try {
+    dispatch(profileLoadingStart());
+    const res = axios.post("api/profile", profileData);
+
+    dispatch({
+      type: GET_PROFILE,
+      payload: res.data
+    });
+    dispatch(
+      setAlert(isEdit ? "Profile Updated" : "Profile Created", "success")
+    );
+    if (!isEdit) {
+      return history.push("/dashboard");
+    }
+  } catch (error) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
+    }
+    dispatch({
+      type: PROFILE_ERROR
+    });
+  }
+};
