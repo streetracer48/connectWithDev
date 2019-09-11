@@ -1,6 +1,15 @@
 import React, { Component } from "react";
 
+import { connect } from "react-redux";
+
+import { currentUserProfile } from "../../actions/profileAction";
+
 class Dashboard extends Component {
+  componentDidMount() {
+    // console.log(this.props.auth);
+
+    this.props.currentUserProfile();
+  }
   render() {
     return (
       <div>
@@ -10,4 +19,11 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+const mapStateToProps = state => ({
+  auth: state.auth.isAuthenticated
+});
+
+export default connect(
+  mapStateToProps,
+  { currentUserProfile }
+)(Dashboard);

@@ -15,7 +15,7 @@ const User = require("../../models/User");
 // @access Public
 
 router.get("/test", (req, res) => res.send("profile Route"));
-// @routes GET api/profile
+// @routes GET api/profile/me
 // @desc Get current user profile
 // @access private
 
