@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { currentUserProfile } from "../../actions/profileAction";
 import Spinner from "../common/spinner";
+import ProfileActions from "../../utils/profileActions";
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -28,6 +29,7 @@ class Dashboard extends Component {
             <p className="lead text-muted">
               Welcome <Link to={`/profile/${profile.handle}`}>{user.name}</Link>
             </p>
+            <ProfileActions />
           </div>
         );
       } else {
@@ -36,6 +38,7 @@ class Dashboard extends Component {
           <div>
             <p className="lead text-muted">Welcome {user.name}</p>
             <p>You have not yet setup a profile, please add some info</p>
+
             <Link to="/create-profile" className="btn btn-lg btn-info">
               Create Profile
             </Link>
