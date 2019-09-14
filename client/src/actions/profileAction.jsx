@@ -1,10 +1,6 @@
 import axios from "axios";
-import {
-  GET_PROFILE,
-  GET_PROFILES,
-  PROFILE_ERROR,
-  PROFILE_LOADING_START
-} from "./types";
+import { GET_PROFILE, PROFILE_ERROR, PROFILE_LOADING_START } from "./types";
+import { setAlert } from "./alert";
 
 export const profileLoadingStart = () => async dispatch => {
   dispatch({
@@ -22,7 +18,8 @@ export const currentUserProfile = () => async dispatch => {
     });
   } catch (error) {
     dispatch({
-      type: PROFILE_ERROR
+      type: PROFILE_ERROR,
+      payload: {}
     });
   }
 };
@@ -35,9 +32,14 @@ export const createProfile = (
   isEdit = false
 ) => async dispatch => {
   try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
     dispatch(profileLoadingStart());
-    const res = axios.post("api/profile", profileData);
-
+    const res = await axios.post("/api/profile", profileData, config);
+    console.log(res);
     dispatch({
       type: GET_PROFILE,
       payload: res.data
@@ -46,16 +48,18 @@ export const createProfile = (
       setAlert(isEdit ? "Profile Updated" : "Profile Created", "success")
     );
     if (!isEdit) {
-      return history.push("/dashboard");
+      // return history.push("/dashboard");
     }
-  } catch (error) {
+  } catch (err) {
     const errors = err.response.data.errors;
 
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
     }
+
     dispatch({
-      type: PROFILE_ERROR
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };

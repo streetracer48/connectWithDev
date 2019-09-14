@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
@@ -12,6 +12,7 @@ import setAuthToken from "./utils/setAuthToken";
 import Alert from "./layout/Alert";
 import PrivateRoute from "./components/routing/PrivateRoute";
 import Dashboard from "./components/dashboard/Dashboard";
+import CreateProfile from "./components/createProfile/createProfile";
 import "./App.css";
 import jwt_decode from "jwt-decode";
 // Check for token
@@ -36,9 +37,6 @@ if (localStorage.jwtToken) {
 }
 
 class App extends Component {
-  componentDidMount() {
-    console.log("called");
-  }
   render() {
     return (
       <Provider store={store}>
@@ -50,7 +48,16 @@ class App extends Component {
               <Alert />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
-              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <Switch>
+                <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/create-profile"
+                  component={CreateProfile}
+                />
+              </Switch>
             </section>
             <Footer />
           </div>

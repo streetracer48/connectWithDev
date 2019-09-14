@@ -4,7 +4,6 @@ import {
   REGISTER_FAIL,
   USER_LOADED,
   AUTH_ERROR,
-  LOGIN_SUCCESS,
   LOGIN_FAIL
 } from "./types";
 import { setAlert } from "./alert";
@@ -20,6 +19,7 @@ export const loadUser = () => async dispatch => {
 
   try {
     const res = await axios.get("/api/users/current");
+    console.log(res);
     dispatch({
       type: USER_LOADED,
       payload: res.data
@@ -83,18 +83,18 @@ export const registerUser = userData => async dispatch => {
 //   }
 // };
 
-export const loginUser = (email, password) => async dispatch => {
+export const loginUser = (userData, history) => async dispatch => {
   const config = {
     headers: {
       "Content-Type": "application/json"
     }
   };
 
-  const body = JSON.stringify({ email, password });
+  // const body = JSON.stringify({ email, password });
 
   try {
-    const res = await axios.post("/api/users/login", body, config);
-
+    const res = await axios.post("/api/users/login", userData, config);
+    console.log(res);
     // Save to localStorage
     const { token } = res.data;
     // Set token to ls
@@ -104,6 +104,8 @@ export const loginUser = (email, password) => async dispatch => {
     // Decode token to get user data
     const decoded = jwt_decode(token);
     dispatch(setCurrentUser(decoded));
+
+    history.push("/dashboard");
   } catch (err) {
     const errors = err.response.data.errors;
 

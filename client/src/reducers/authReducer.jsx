@@ -1,4 +1,4 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED } from "../actions/types";
+import { USER_LOADED } from "../actions/types";
 
 const initialState = {
   isAuthenticated: false,

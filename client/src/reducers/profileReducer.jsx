@@ -1,15 +1,13 @@
 import {
   GET_PROFILE,
-  GET_PROFILES,
   PROFILE_ERROR,
   PROFILE_LOADING_START
 } from "../actions/types";
 
 const initialState = {
   profile: null,
-  profiles: [],
-  loading: false,
-  errors: {}
+  profiles: null,
+  loading: false
 };
 
 export default function(state = initialState, action) {
@@ -23,15 +21,14 @@ export default function(state = initialState, action) {
     case GET_PROFILE:
       return {
         ...state,
-        loading: false,
-        profile: payload
+        profile: payload,
+        loading: false
       };
     case PROFILE_ERROR:
       return {
         ...state,
-        loading: false,
-        profile: null,
-        profiles: []
+        profile: payload,
+        loading: false
       };
 
     default:
