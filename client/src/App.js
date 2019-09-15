@@ -13,6 +13,7 @@ import Alert from "./layout/Alert";
 import PrivateRoute from "./components/routing/PrivateRoute";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/createProfile/createProfile";
+import EditProfile from "./components/editProfile/editProfile";
 import "./App.css";
 import jwt_decode from "jwt-decode";
 // Check for token
@@ -56,6 +57,13 @@ class App extends Component {
                   exact
                   path="/create-profile"
                   component={CreateProfile}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/edit-profile"
+                  component={EditProfile}
                 />
               </Switch>
             </section>

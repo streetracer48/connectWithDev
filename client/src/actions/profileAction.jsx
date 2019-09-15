@@ -48,7 +48,7 @@ export const createProfile = (
       setAlert(isEdit ? "Profile Updated" : "Profile Created", "success")
     );
     if (!isEdit) {
-      // return history.push("/dashboard");
+      return history.push("/dashboard");
     }
   } catch (err) {
     const errors = err.response.data.errors;
