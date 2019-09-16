@@ -1,7 +1,8 @@
 import {
   GET_PROFILE,
   PROFILE_ERROR,
-  PROFILE_LOADING_START
+  PROFILE_LOADING_START,
+  UPDATE_PROFILE
 } from "../actions/types";
 
 const initialState = {
@@ -19,6 +20,7 @@ export default function(state = initialState, action) {
         loading: true
       };
     case GET_PROFILE:
+    case UPDATE_PROFILE:
       return {
         ...state,
         profile: payload,
