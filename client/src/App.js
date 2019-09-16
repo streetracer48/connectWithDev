@@ -15,6 +15,7 @@ import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/createProfile/createProfile";
 import EditProfile from "./components/editProfile/editProfile";
 import AddExperience from "./components/profile-form/AddExperience";
+import AddEducation from "./components/profile-form/AddEducation";
 import "./App.css";
 import jwt_decode from "jwt-decode";
 // Check for token
@@ -72,6 +73,13 @@ class App extends Component {
                   exact
                   path="/add-experience"
                   component={AddExperience}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/add-education"
+                  component={AddEducation}
                 />
               </Switch>
             </section>
