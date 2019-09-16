@@ -83,12 +83,18 @@ const ProfileSchema = new Schema({
       to: {
         type: String
       },
+      from: {
+        type: String
+      },
 
       current: {
         type: Boolean,
         default: false
       },
       description: {
+        type: String
+      },
+      location: {
         type: String
       }
     }

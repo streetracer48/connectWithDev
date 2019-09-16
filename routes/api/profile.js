@@ -204,7 +204,8 @@ router.put(
       from,
       to,
       current,
-      description
+      description,
+      location
     } = req.body;
 
     const newEdu = {
@@ -214,7 +215,8 @@ router.put(
       from,
       to,
       current,
-      description
+      description,
+      location
     };
 
     try {
