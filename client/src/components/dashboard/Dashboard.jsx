@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { currentUserProfile } from "../../actions/profileAction";
 import Spinner from "../common/spinner";
 import ProfileActions from "../../utils/profileActions";
+import Experience from "./Experience";
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -14,7 +15,6 @@ class Dashboard extends Component {
   render() {
     const { user } = this.props.auth;
     const { profile, loading } = this.props.profile;
-    console.log(this.props.auth, this.props.profile);
 
     let dashboardContent;
 
@@ -30,6 +30,7 @@ class Dashboard extends Component {
               Welcome <Link to={`/profile/${profile.handle}`}>{user.name}</Link>
             </p>
             <ProfileActions />
+            <Experience experience={profile.experience} />
           </div>
         );
       } else {
