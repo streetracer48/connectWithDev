@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import Moment from "react-moment";
+import { connect } from "react-redux";
+import { deleteEducation } from "../../actions/profileAction";
 class Experience extends Component {
-  onDelete = () => {};
+  onDelete = id => {
+    this.props.deleteEducation(id);
+  };
   render() {
     const { experience } = this.props;
     let experienceContent;
 
-    if (experience.length > 0) {
+    if (experience && experience.length > 0) {
       experienceContent = this.props.experience.map(exp => (
         <tr>
           <td>{exp.company}</td>
@@ -20,7 +24,11 @@ class Experience extends Component {
             )}
           </td>
           <td>
-            <button onClick={this.onDelete} className="btn btn-danger">
+            <button
+              type="submit"
+              onClick={() => this.onDelete(exp._id)}
+              className="btn btn-danger"
+            >
               Delete
             </button>
           </td>
@@ -48,4 +56,7 @@ class Experience extends Component {
   }
 }
 
-export default Experience;
+export default connect(
+  null,
+  { deleteEducation }
+)(Experience);

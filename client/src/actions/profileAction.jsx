@@ -131,3 +131,28 @@ export const addEducation = (data, history) => async dispatch => {
     });
   }
 };
+
+// Delete edu by id
+
+export const deleteEducation = id => async dispatch => {
+  try {
+    const res = await axios.delete(`/api/profile/experience/${id}`);
+
+    dispatch({
+      type: GET_PROFILE,
+      payload: res.data
+    });
+    dispatch(setAlert("Successfully deleted experience", "success"));
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
+    }
+
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
