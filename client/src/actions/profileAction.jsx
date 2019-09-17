@@ -134,15 +134,52 @@ export const addEducation = (data, history) => async dispatch => {
 
 // Delete edu by id
 
-export const deleteEducation = id => async dispatch => {
+export const deleteExperience = id => async dispatch => {
   try {
-    const res = await axios.delete(`/api/profile/experience/${id}`);
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    const res = await axios.delete(`/api/profile/experience/${id}`, config);
 
     dispatch({
       type: GET_PROFILE,
       payload: res.data
     });
     dispatch(setAlert("Successfully deleted experience", "success"));
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
+    }
+
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+/// delete edu by id
+
+export const deleteEducation = id => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    const res = await axios.delete(`/api/profile/education/${id}`, config);
+
+    dispatch({
+      type: GET_PROFILE,
+      payload: res.data
+    });
+
+    dispatch("Successfully Deleted education", "success");
   } catch (err) {
     const errors = err.response.data.errors;
 
