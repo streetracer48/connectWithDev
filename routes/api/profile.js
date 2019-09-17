@@ -342,4 +342,20 @@ router.delete(
   }
 );
 
+router.get("/handle/:handle_name", async (req, res) => {
+  try {
+    const profile = await Profile.findOne({
+      handle: req.params.handle_name
+    }).populate("user", ["name", "avatar"]);
+
+    if (!profile) {
+      return res.status(404).json({ msg: "Profile not found" });
+    }
+
+    res.json(profile);
+  } catch (error) {
+    return res.status(5000).json({ msg: "Server errors" });
+  }
+});
+
 module.exports = router;
