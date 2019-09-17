@@ -5,6 +5,7 @@ import Spinner from "../common/spinner";
 import { Link } from "react-router-dom";
 import About from "./about";
 import Header from "./header";
+import Credential from "./credential";
 
 class Profile extends Component {
   componentDidMount() {
@@ -37,6 +38,10 @@ class Profile extends Component {
           <div className="row">{profileContent}</div>
           <Header profile={profile} />
           <About profile={profile} />
+          <Credential
+            experience={profile.experience}
+            education={profile.education}
+          />
         </div>
       </div>
     );
