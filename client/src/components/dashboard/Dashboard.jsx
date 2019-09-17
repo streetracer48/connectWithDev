@@ -6,6 +6,7 @@ import { currentUserProfile } from "../../actions/profileAction";
 import Spinner from "../common/spinner";
 import ProfileActions from "../../utils/profileActions";
 import Experience from "./Experience";
+import Education from "./Education";
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -31,6 +32,7 @@ class Dashboard extends Component {
             </p>
             <ProfileActions />
             <Experience experience={profile.experience} />
+            <Education education={profile.education} />
           </div>
         );
       } else {

@@ -309,7 +309,7 @@ router.delete(
       const removeIndex = eduIds.indexOf(req.params.edu_id);
 
       if (removeIndex === -1) {
-        return res.status(500).json({ msg: "Server Error" });
+        return res.status(500).send("Server Error");
       }
 
       foundProfile.education.splice(removeIndex, 1);
