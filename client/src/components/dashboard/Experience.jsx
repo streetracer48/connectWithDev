@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { deleteExperience } from "../../actions/profileAction";
 class Experience extends Component {
   onDelete = id => {
-    this.props.deleteEducation(id);
+    this.props.deleteExperience(id);
   };
   render() {
     const { experience } = this.props;
@@ -46,7 +46,6 @@ class Experience extends Component {
               <th>Company</th>
               <th>Title</th>
               <th>Year</th>
-              <th />
             </tr>
             {experienceContent}
           </thead>

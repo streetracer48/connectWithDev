@@ -179,7 +179,7 @@ export const deleteEducation = id => async dispatch => {
       payload: res.data
     });
 
-    dispatch("Successfully Deleted education", "success");
+    dispatch(setAlert("Successfully Deleted education", "success"));
   } catch (err) {
     const errors = err.response.data.errors;
 
