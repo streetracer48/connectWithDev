@@ -16,6 +16,7 @@ import CreateProfile from "./components/createProfile/createProfile";
 import EditProfile from "./components/editProfile/editProfile";
 import AddExperience from "./components/profile-form/AddExperience";
 import AddEducation from "./components/profile-form/AddEducation";
+import GetprofileByhandle from "./components/profile/profile";
 import "./App.css";
 import jwt_decode from "jwt-decode";
 // Check for token
@@ -51,6 +52,11 @@ class App extends Component {
               <Alert />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
+              <Route
+                exact
+                path="/profile/:handle"
+                component={GetprofileByhandle}
+              />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Switch>
