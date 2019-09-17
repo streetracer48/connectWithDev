@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Moment from "react-moment";
 import { connect } from "react-redux";
-import { deleteEducation } from "../../actions/profileAction";
+import { deleteExperience } from "../../actions/profileAction";
 class Experience extends Component {
   onDelete = id => {
     this.props.deleteEducation(id);
@@ -58,5 +58,5 @@ class Experience extends Component {
 
 export default connect(
   null,
-  { deleteEducation }
+  { deleteExperience }
 )(Experience);
