@@ -104,12 +104,38 @@ router.post(
     if (instagram) profileFields.social.instagram = instagram;
 
     try {
-      let profile = await Profile.findOneAndUpdate(
-        { user: req.user.id },
-        { $set: profileFields },
-        { new: true, upsert: true }
-      );
-      res.json(profile);
+      const profile = await Profile.findOne({ user: req.user.id });
+      if (profile) {
+        Profile.findOneAndUpdate(
+          { user: req.user.id },
+          { $set: profileFields },
+          { new: true }
+        );
+      } else {
+        //check if handle is exist or not
+        const existHandle = await Profile.findOne({
+          handle: profileFields.handle
+        });
+        if (existHandle) {
+          return res
+            .status(404)
+            .json({ errors: [{ msg: "The handle already exists" }] });
+        }
+        const profile = new Profile(profileFields);
+        profile.save();
+        res.json(profile);
+      }
+
+      // if(profileFields.handle){
+      //   const profile = await Profile.findOne
+      // }
+
+      // let profile = await Profile.findOneAndUpdate(
+      //   { user: req.user.id },
+      //   { $set: profileFields },
+      //   { new: true, upsert: true }
+      // );
+      // res.json(profile);
     } catch (error) {
       res.status(500).send("Server Error");
     }

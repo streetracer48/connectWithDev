@@ -11,7 +11,6 @@ import isEmpty from '../../utils/isEmpty'
 class EditProfile extends Component {
     state = {
         displaySocialInouts: false,
-        handle: "",
         company: "",
         website: "",
         status: "",
@@ -35,13 +34,13 @@ class EditProfile extends Component {
         if (this.props.profile.profile !== prevProps.profile.profile){
             
         const profile = this.props.profile.profile
-        console.log(profile.handle)
+       
         // bring  skisss array to csv
 
             const skillsCSV = !isEmpty(profile.skills) ? profile.skills.join(',') : '';
         
         // if profile field doesn't exit , make empty string
-        profile.handle = !isEmpty(profile.handle)? profile.handle : '';
+       
         profile.company = !isEmpty(profile.company) ? profile.company :'';
         profile.website = !isEmpty(profile.website) ? profile.website : '';
         profile.location = !isEmpty(profile.location)? profile.location : '';
@@ -56,7 +55,7 @@ class EditProfile extends Component {
 
         // Set component field state 
         this.setState({
-            handle:profile.handle,
+        
             company:profile.company,
             website:profile.website,
             location:profile.location,
@@ -90,7 +89,7 @@ class EditProfile extends Component {
             location,
             bio,
             githubusername,
-            handle,
+            
             facebook,
             twitter,
             instagram,
@@ -104,7 +103,7 @@ class EditProfile extends Component {
             location,
             bio,
             githubusername,
-            handle,
+            
             facebook,
             twitter,
             instagram,
@@ -121,7 +120,7 @@ class EditProfile extends Component {
             displaySocialInouts,
             status,
             company,
-            handle,
+        
             website,
             location,
             bio,
@@ -195,14 +194,7 @@ class EditProfile extends Component {
                             <small className="d-block pb-3">*= required filed</small>
 
                             <form onSubmit={this.onSubmit}>
-                                <TextFieldGroup
-                                    name="handle"
-                                    placeholder="handle"
-                                    value={handle}
-                                    onChange={this.onChange}
-                                    error={errors.handle}
-                                    info="A unique handle for your profile URL example company name website profile name"
-                                />
+                               
                                 <SelectListGroup
                                     name="status"
                                     value={status}
