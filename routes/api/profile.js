@@ -106,11 +106,13 @@ router.post(
     try {
       const profile = await Profile.findOne({ user: req.user.id });
       if (profile) {
-        Profile.findOneAndUpdate(
+       const profile = await  Profile.findOneAndUpdate(
           { user: req.user.id },
           { $set: profileFields },
           { new: true }
         );
+        res.json(profile)
+
       } else {
         //check if handle is exist or not
         const existHandle = await Profile.findOne({
