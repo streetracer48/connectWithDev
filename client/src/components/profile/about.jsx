@@ -9,9 +9,8 @@ class About extends Component {
 
     // SKill list
     const skills = profile.skills.map((skill, index) => (
-      <div key={index}>
-        <i className="fa fa-check" />
-        {skill}
+      <div key={index} className="p-3">
+        <i className="fa fa-check" /> {skill}
       </div>
     ));
     return (
