@@ -67,6 +67,9 @@ export const unLikePost = id => async dispatch => {
 
     const res = await axios.put(`/api/posts/unlike/${id}`, config);
 
-    dispatch(getposts());
+    dispatch({
+      type: UPDATE_LIKES,
+      payload: { id, likes: res.data }
+    });
   } catch (error) {}
 };

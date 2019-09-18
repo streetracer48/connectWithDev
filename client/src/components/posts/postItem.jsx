@@ -32,7 +32,7 @@ class PostItem extends Component {
 
   render() {
     const { post, data, showActions } = this.props;
-    console.log(this.findUserLike());
+
     return (
       <div className="card card-body mb-3">
         <div className="row">
