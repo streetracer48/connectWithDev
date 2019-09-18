@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   GET_PROFILE,
+  GET_PROFILES,
   PROFILE_ERROR,
   PROFILE_LOADING_START,
   UPDATE_PROFILE
@@ -212,6 +213,34 @@ export const getProfilebyhandler = handle => async dispatch => {
     const errors = err.response.data.errors;
 
     if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
+    }
+
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+export const getProfiles = () => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    const res = await axios.get("/api/profile/profiles", config);
+
+    dispatch({
+      type: GET_PROFILES,
+      payload: res.data
+    });
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (err) {
       errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
     }
 

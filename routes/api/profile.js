@@ -106,13 +106,12 @@ router.post(
     try {
       const profile = await Profile.findOne({ user: req.user.id });
       if (profile) {
-       const profile = await  Profile.findOneAndUpdate(
+        const profile = await Profile.findOneAndUpdate(
           { user: req.user.id },
           { $set: profileFields },
           { new: true }
         );
-        res.json(profile)
-
+        res.json(profile);
       } else {
         //check if handle is exist or not
         const existHandle = await Profile.findOne({
@@ -266,9 +265,9 @@ router.put(
 // @des Get all profiles
 // @access Public
 
-router.get("/", async (req, res) => {
+router.get("/profiles", async (req, res) => {
   try {
-    const profiles = await Profile.find().populate("user", ["name", "avatar"]);
+    const profiles = await Profile.find({}).populate("user", ["name", "avatar"]);
     res.json(profiles);
   } catch (error) {
     console.log(error);
