@@ -32,8 +32,10 @@ router.post(
     }
 
     try {
-      const user = User.findById(req.user.id).select("-password");
-
+      const user = await User.findById(req.user.id).select(
+        "-password"
+      );
+      console.log(user);
       const newPost = new Post({
         text: req.body.text,
         name: user.name,
@@ -130,7 +132,8 @@ router.put(
     foundpost.likes.unshift({ user: req.user.id });
 
     await foundpost.save();
-    res.json(foundpost);
+
+    res.json(foundpost.likes);
   }
 );
 

@@ -1,6 +1,17 @@
 import axios from "axios";
-import { GET_POSTS, POSTS_ERROR, POSTS_LOADING_START } from "./types";
+import {
+  GET_POSTS,
+  POSTS_ERROR,
+  POSTS_LOADING_START,
+  UPDATE_LIKES
+} from "./types";
 import { setAlert } from "./alert";
+
+export const startPostsLoading = () => dispatch => {
+  dispatch({
+    type: POSTS_LOADING_START
+  });
+};
 
 export const getposts = () => async dispatch => {
   try {
@@ -30,8 +41,32 @@ export const getposts = () => async dispatch => {
   }
 };
 
-export const startPostsLoading = () => dispatch => {
-  dispatch({
-    type: POSTS_LOADING_START
-  });
+export const postLike = id => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    const res = await axios.put(`/api/posts/like/${id}`, config);
+    dispatch({
+      type: UPDATE_LIKES,
+      payload: { id, likes: res.data }
+    });
+  } catch (error) {}
+};
+
+export const unLikePost = id => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    const res = await axios.put(`/api/posts/unlike/${id}`, config);
+
+    dispatch(getposts());
+  } catch (error) {}
 };
