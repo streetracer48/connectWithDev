@@ -17,6 +17,7 @@ import EditProfile from "./components/editProfile/editProfile";
 import AddExperience from "./components/profile-form/AddExperience";
 import AddEducation from "./components/profile-form/AddEducation";
 import GetprofileByhandle from "./components/profile/profile";
+import Profiles from "./components/profiles/profiles";
 import "./App.css";
 import jwt_decode from "jwt-decode";
 // Check for token
@@ -57,6 +58,7 @@ class App extends Component {
                 path="/profile/:handle"
                 component={GetprofileByhandle}
               />
+              <Route exact path="/profiles" component={Profiles} />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Switch>
