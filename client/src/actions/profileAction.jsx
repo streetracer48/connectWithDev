@@ -230,7 +230,7 @@ export const getProfiles = () => async dispatch => {
         "Content-Type": "application/json"
       }
     };
-
+    dispatch(profileLoadingStart());
     const res = await axios.get("/api/profile/profiles", config);
 
     dispatch({
