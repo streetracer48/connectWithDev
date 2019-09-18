@@ -11,7 +11,7 @@ const ProfileItems = ({ profile }) => {
         <div className="col-lg-6 col-md-4 col-8">
           <h3>{profile.user.name}</h3>
           <p>
-            {profile.status}
+            {profile.status}{" "}
             {isEmpty(profile.company) ? null : (
               <span>at {profile.company}</span>
             )}
