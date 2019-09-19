@@ -6,7 +6,8 @@ import {
   UPDATE_LIKES,
   DELETE_POST,
   ADD_POST,
-  ADD_COMMENT
+  ADD_COMMENT,
+  GET_POST
 } from "./types";
 import { setAlert } from "./alert";
 
@@ -134,6 +135,23 @@ export const addComment = (postId, fromData) => async dispatch => {
 
     dispatch({
       type: ADD_COMMENT,
+      payload: res.data
+    });
+  } catch (error) {}
+};
+
+export const getPostById = id => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    const res = await axios.get(`/api/posts/${id}`, config);
+
+    dispatch({
+      type: GET_POST,
       payload: res.data
     });
   } catch (error) {}
