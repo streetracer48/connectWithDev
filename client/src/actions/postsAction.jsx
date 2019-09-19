@@ -3,7 +3,8 @@ import {
   GET_POSTS,
   POSTS_ERROR,
   POSTS_LOADING_START,
-  UPDATE_LIKES
+  UPDATE_LIKES,
+  DELETE_POST
 } from "./types";
 import { setAlert } from "./alert";
 
@@ -72,4 +73,31 @@ export const unLikePost = id => async dispatch => {
       payload: { id, likes: res.data }
     });
   } catch (error) {}
+};
+
+export const deletePost = id => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    const res = axios.delete(`/api/posts/${id}`, config);
+    dispatch({
+      type: DELETE_POST,
+      payload: id
+    });
+    dispatch(setAlert("Your post successfully deleted", "success"));
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
+    }
+
+    dispatch({
+      type: POSTS_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
 };

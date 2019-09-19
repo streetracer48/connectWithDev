@@ -237,6 +237,9 @@ router.delete(
         .map(comment => comment.id.toString())
         .indexOf(req.params.comment_id);
 
+
+        
+
       if (removeIndex === -1) {
         return res.status(500).json({ msg: "Server Error" });
       }
