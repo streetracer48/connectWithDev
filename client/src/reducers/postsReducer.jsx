@@ -4,7 +4,8 @@ import {
   POSTS_LOADING_START,
   UPDATE_LIKES,
   DELETE_POST,
-  ADD_POST
+  ADD_POST,
+  ADD_COMMENT
 } from "../actions/types";
 
 const initialState = {
@@ -49,6 +50,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         posts: state.posts.filter(post => post._id !== payload),
+        loading: false
+      };
+    case ADD_COMMENT:
+      return {
+        ...state,
+        post: { ...state.post, comments: payload },
         loading: false
       };
     case POSTS_ERROR:

@@ -5,7 +5,8 @@ import {
   POSTS_LOADING_START,
   UPDATE_LIKES,
   DELETE_POST,
-  ADD_POST
+  ADD_POST,
+  ADD_COMMENT
 } from "./types";
 import { setAlert } from "./alert";
 
@@ -119,4 +120,21 @@ export const addPost = fromData => async dispatch => {
       payload: res.data
     });
   } catch (err) {}
+};
+
+export const addComment = (postId, fromData) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    const res = axios.post(`/api/posts/comment/${postId}`, fromData, config);
+
+    dispatch({
+      type: ADD_COMMENT,
+      payload: res.data
+    });
+  } catch (error) {}
 };
