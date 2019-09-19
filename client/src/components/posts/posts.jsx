@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { getposts } from "../../actions/postsAction";
 import Spinner from "../common/spinner";
 import PostFeed from "./postFeed";
+import PostForm from "./postForm";
 
 class Posts extends Component {
   componentDidMount() {
@@ -17,16 +18,20 @@ class Posts extends Component {
       postsContent = <Spinner />;
     } else {
       if (posts && posts.length > 0) {
-        return (postsContent = <PostFeed posts={posts} />);
+        postsContent = <PostFeed posts={posts} />;
       } else {
         postsContent = <p>posts not found</p>;
       }
     }
     return (
-      <div className="posts">
+      <div className="feed">
         <div className="container">
           <div className="row">
-            <div className="col-md-12">{postsContent}</div>
+            <div className="col-md-12">
+              <PostForm />
+
+              {postsContent}
+            </div>
           </div>
         </div>
       </div>

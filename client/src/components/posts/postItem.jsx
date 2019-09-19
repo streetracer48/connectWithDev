@@ -32,8 +32,8 @@ class PostItem extends Component {
   };
 
   render() {
-    const { post, data, showActions } = this.props;
-
+    const { post, showActions, auth } = this.props;
+    console.log(post.user._id, auth.user.id);
     return (
       <div className="card card-body mb-3">
         <div className="row">
@@ -78,13 +78,16 @@ class PostItem extends Component {
                 <Link to="post/id" className="btn btn-info mr-1">
                   Comments
                 </Link>
-                <button
-                  onClick={() => this.postDelete(post._id)}
-                  type="button"
-                  className="btn btn-danger mr-1"
-                >
-                  <i className="fas fa-times" />
-                </button>
+
+                {post.user._id === auth.user.id ? (
+                  <button
+                    onClick={() => this.postDelete(post._id)}
+                    type="button"
+                    className="btn btn-danger mr-1"
+                  >
+                    <i className="fas fa-times" />
+                  </button>
+                ) : null}
               </span>
             ) : null}
           </div>
