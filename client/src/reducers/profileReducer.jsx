@@ -3,7 +3,8 @@ import {
   PROFILE_ERROR,
   PROFILE_LOADING_START,
   UPDATE_PROFILE,
-  GET_PROFILES
+  GET_PROFILES,
+  ADD_POST
 } from "../actions/types";
 
 const initialState = {
@@ -32,6 +33,13 @@ export default function(state = initialState, action) {
       return {
         ...state,
         profiles: payload,
+        loading: false
+      };
+
+    case ADD_POST:
+      return {
+        ...state,
+        posts: [payload, ...state.posts],
         loading: false
       };
     case PROFILE_ERROR:
