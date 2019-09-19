@@ -33,7 +33,7 @@ router.post(
 
     try {
       const user = await User.findById(req.user.id).select("-password");
-      console.log(user);
+   
       const newPost = new Post({
         text: req.body.text,
         name: user.name,
@@ -64,7 +64,7 @@ router.get(
         "name",
         "avatar"
       ]);
-      console.log(post);
+      
       if (!post) {
         return res.status(404).json({ msg: "Post not found" });
       }
@@ -100,7 +100,7 @@ router.get(
       }
       res.json(posts);
     } catch (err) {
-      console.error(err.message);
+     
       if (err.kind === "ObjectId") {
         return res.status(404).json({ msg: "Post not found" });
       }
@@ -166,7 +166,7 @@ router.put(
       await post.save();
       res.json(post.likes);
     } catch (error) {
-      console.log(error);
+   
       res.status("500").json({ msg: "Server Error" });
     }
   }
@@ -210,7 +210,7 @@ router.post(
 // access private
 
 router.delete(
-  "/:post_id/:comment_id",
+  "/comment/:post_id/:comment_id",
   // passport.authenticate("jwt", { session: false }),
   Auth,
   async (req, res) => {
@@ -268,7 +268,7 @@ router.delete(
 
       res.json({ msg: "the post deleted successfully" });
     } catch (error) {
-      console.log(error);
+      
       return res.status(500).json({ msg: "Server Error" });
     }
   }

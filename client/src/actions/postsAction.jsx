@@ -7,7 +7,8 @@ import {
   DELETE_POST,
   ADD_POST,
   ADD_COMMENT,
-  GET_POST
+  GET_POST,
+  DELETE_COMMENT
 } from "./types";
 import { setAlert } from "./alert";
 
@@ -158,6 +159,26 @@ export const getPostById = id => async dispatch => {
     dispatch({
       type: GET_POST,
       payload: res.data
+    });
+  } catch (error) {}
+};
+
+export const commentDelete = (postId, commentId) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    const res = await axios.delete(
+      `/api/posts/comment/${postId}/${commentId}`,
+      config
+    );
+
+    dispatch({
+      type: DELETE_COMMENT,
+      payload: commentId
     });
   } catch (error) {}
 };
