@@ -110,23 +110,13 @@ export const addPost = fromData => async dispatch => {
         "Content-Type": "application/json"
       }
     };
+    console.log(fromData);
 
-    const res = axios.post("/api/posts", fromData, config);
+    const res = await axios.post("/api/posts", fromData);
 
     dispatch({
       type: ADD_POST,
       payload: res.data
     });
-  } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
-    }
-
-    dispatch({
-      type: POSTS_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
-  }
+  } catch (err) {}
 };
