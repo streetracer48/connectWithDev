@@ -4,7 +4,8 @@ import {
   POSTS_ERROR,
   POSTS_LOADING_START,
   UPDATE_LIKES,
-  DELETE_POST
+  DELETE_POST,
+  ADD_POST
 } from "./types";
 import { setAlert } from "./alert";
 
@@ -88,6 +89,34 @@ export const deletePost = id => async dispatch => {
       payload: id
     });
     dispatch(setAlert("Your post successfully deleted", "success"));
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
+    }
+
+    dispatch({
+      type: POSTS_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+export const addPost = fromData => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    const res = axios.post("/api/posts", fromData, config);
+
+    dispatch({
+      type: ADD_POST,
+      payload: res.data
+    });
   } catch (err) {
     const errors = err.response.data.errors;
 
