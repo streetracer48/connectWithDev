@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { postLike, unLikePost } from "../../actions/postsAction";
+import { postLike, unLikePost, deletePost } from "../../actions/postsAction";
 import classnames from "classnames";
 class PostItem extends Component {
   onLikeClick = id => {
@@ -13,12 +13,13 @@ class PostItem extends Component {
     this.props.unLikePost(id);
   };
 
-  postDelete = () => {};
+  postDelete = id => {
+    this.props.deletePost(id);
+  };
 
   findUserLike = likes => {
     const { auth } = this.props;
     if (likes && likes.length > 0) {
-
       if (
         likes &&
         likes.filter(like => like.user === auth.user.id).length > 0
@@ -32,7 +33,7 @@ class PostItem extends Component {
 
   render() {
     const { post, data, showActions } = this.props;
-    console.log(this.findUserLike());
+
     return (
       <div className="card card-body mb-3">
         <div className="row">
@@ -78,7 +79,7 @@ class PostItem extends Component {
                   Comments
                 </Link>
                 <button
-                  onClick={this.postDelete}
+                  onClick={() => this.postDelete(post._id)}
                   type="button"
                   className="btn btn-danger mr-1"
                 >
@@ -103,5 +104,5 @@ const mapStateProps = state => ({
 
 export default connect(
   mapStateProps,
-  { postLike, unLikePost }
+  { postLike, unLikePost, deletePost }
 )(PostItem);

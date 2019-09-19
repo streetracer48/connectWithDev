@@ -32,9 +32,7 @@ router.post(
     }
 
     try {
-      const user = await User.findById(req.user.id).select(
-        "-password"
-      );
+      const user = await User.findById(req.user.id).select("-password");
       console.log(user);
       const newPost = new Post({
         text: req.body.text,
@@ -166,7 +164,8 @@ router.put(
       post.likes.splice(removeIndex, 1);
 
       await post.save();
-      res.json(post);
+      res.json(post.likes);
+      
     } catch (error) {
       console.log(error);
       res.status("500").json({ msg: "Server Error" });
@@ -237,6 +236,9 @@ router.delete(
       const removeIndex = post.comments
         .map(comment => comment.id.toString())
         .indexOf(req.params.comment_id);
+
+
+        
 
       if (removeIndex === -1) {
         return res.status(500).json({ msg: "Server Error" });
