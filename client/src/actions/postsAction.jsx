@@ -131,7 +131,11 @@ export const addComment = (postId, fromData) => async dispatch => {
       }
     };
 
-    const res = axios.post(`/api/posts/comment/${postId}`, fromData, config);
+    const res = await axios.post(
+      `/api/posts/comment/${postId}`,
+      fromData,
+      config
+    );
 
     dispatch({
       type: ADD_COMMENT,
@@ -148,6 +152,7 @@ export const getPostById = id => async dispatch => {
       }
     };
 
+    dispatch(startPostsLoading());
     const res = await axios.get(`/api/posts/${id}`, config);
 
     dispatch({

@@ -33,7 +33,7 @@ class PostItem extends Component {
 
   render() {
     const { post, showActions, auth } = this.props;
-    console.log(post.user._id, auth.user.id);
+
     return (
       <div className="card card-body mb-3">
         <div className="row">
@@ -75,11 +75,11 @@ class PostItem extends Component {
                 >
                   <i className="text-secondary fas fa-thumbs-down" />
                 </button>
-                <Link to="post/id" className="btn btn-info mr-1">
+                <Link to={`/post/${post._id}`} className="btn btn-info mr-1">
                   Comments
                 </Link>
 
-                {post.user._id === auth.user.id ? (
+                {!auth.loading && post.user === auth.user.id ? (
                   <button
                     onClick={() => this.postDelete(post._id)}
                     type="button"

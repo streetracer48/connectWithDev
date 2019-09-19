@@ -165,7 +165,6 @@ router.put(
 
       await post.save();
       res.json(post.likes);
-      
     } catch (error) {
       console.log(error);
       res.status("500").json({ msg: "Server Error" });
@@ -201,7 +200,7 @@ router.post(
       };
       post.comments.unshift(newComment);
       await post.save();
-      res.json(post);
+      res.json(post.comments);
     } catch (error) {}
   }
 );
@@ -236,9 +235,6 @@ router.delete(
       const removeIndex = post.comments
         .map(comment => comment.id.toString())
         .indexOf(req.params.comment_id);
-
-
-        
 
       if (removeIndex === -1) {
         return res.status(500).json({ msg: "Server Error" });
