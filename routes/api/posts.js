@@ -49,7 +49,7 @@ router.post(
   }
 );
 
-// @router api/post/:id
+// @router api/posts/:id
 // @desc get post by id
 
 // Private
