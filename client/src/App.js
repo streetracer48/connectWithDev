@@ -19,6 +19,7 @@ import AddEducation from "./components/profile-form/AddEducation";
 import GetprofileByhandle from "./components/profile/profile";
 import Profiles from "./components/profiles/profiles";
 import Posts from "./components/posts/posts";
+import Post from "./components/post/post";
 import "./App.css";
 import jwt_decode from "jwt-decode";
 // Check for token
@@ -93,6 +94,9 @@ class App extends Component {
               </Switch>
               <Switch>
                 <PrivateRoute exact path="/feed" component={Posts} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/post/:id" component={Post} />
               </Switch>
             </section>
             <Footer />
