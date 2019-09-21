@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
 import InputGroup from "../common/InputGroup";
 import TextAreaFieldGroup from "../common/TextAreaField";
 import SelectListGroup from "../common/SelectListGroup";
-import { createProfile } from "../../actions/profileAction";
+import { createProfile, currentUserProfile } from "../../actions/profileAction";
 
 class CreateProfile extends Component {
   state = {
@@ -62,9 +62,28 @@ class CreateProfile extends Component {
       instagram,
       youtube
     };
-    this.props.createProfile(createProfileData);
+    this.props.createProfile(createProfileData, this.props.history);
   };
 
+  componentDidMount() {
+    this.props.currentUserProfile();
+    // console.log(this.props.profile.profile);
+    // const { profile, loading } = this.props.profile;
+    // console.log(this.props.profile.profile);
+    // if (profile == null) {
+    //   return <Redirect to="/dashboard" />;
+    // }
+  }
+
+  componentDidUpdate(prevProps) {
+    console.log(this.props.profile.profile);
+    if (
+      this.props.profile.profile &&
+      Object.keys(this.props.profile.profile).length > 0
+    ) {
+      return this.props.history.push("/dashboard");
+    }
+  }
   render() {
     const {
       errors,
@@ -82,6 +101,9 @@ class CreateProfile extends Component {
       youtube,
       githubusername
     } = this.state;
+
+    const { profile } = this.props.profile;
+
     let socialInputs;
     if (displaySocialInouts) {
       socialInputs = (
@@ -240,7 +262,11 @@ class CreateProfile extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  profile: state.profile
+});
+
 export default connect(
-  null,
-  { createProfile }
+  mapStateToProps,
+  { createProfile, currentUserProfile }
 )(withRouter(CreateProfile));
