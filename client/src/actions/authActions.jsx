@@ -4,7 +4,8 @@ import {
   REGISTER_FAIL,
   USER_LOADED,
   AUTH_ERROR,
-  LOGIN_FAIL
+  LOGIN_FAIL,
+  LOGIN_SUCCESS
 } from "./types";
 import { setAlert } from "./alert";
 import setAuthToken from "../utils/setAuthToken";
@@ -13,13 +14,12 @@ import jwt_decode from "jwt-decode";
 // load user
 
 export const loadUser = () => async dispatch => {
-  if (localStorage.token) {
-    setAuthToken(localStorage.token);
+  if (localStorage.jwtToken) {
+    setAuthToken(localStorage.jwtToken);
   }
 
   try {
     const res = await axios.get("/api/users/current");
-    console.log(res);
     dispatch({
       type: USER_LOADED,
       payload: res.data
@@ -94,16 +94,11 @@ export const loginUser = (userData, history) => async dispatch => {
 
   try {
     const res = await axios.post("/api/users/login", userData, config);
-    console.log(res);
-    // Save to localStorage
-    const { token } = res.data;
-    // Set token to ls
-    localStorage.setItem("jwtToken", token);
-    // Set token to Auth header
-    setAuthToken(token);
-    // Decode token to get user data
-    const decoded = jwt_decode(token);
-    dispatch(setCurrentUser(decoded));
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: res.data
+    });
+    dispatch(loadUser());
 
     history.push("/dashboard");
   } catch (err) {

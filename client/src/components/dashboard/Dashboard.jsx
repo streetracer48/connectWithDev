@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 import { connect } from "react-redux";
-import { currentUserProfile } from "../../actions/profileAction";
+import { currentUserProfile, deleteAccount } from "../../actions/profileAction";
 import Spinner from "../common/spinner";
 import ProfileActions from "../../utils/profileActions";
 import Experience from "./Experience";
@@ -12,6 +12,10 @@ class Dashboard extends Component {
   componentDidMount() {
     this.props.currentUserProfile();
   }
+
+  deleteAccount = () => {
+    this.props.deleteAccount();
+  };
 
   render() {
     const { user } = this.props.auth;
@@ -33,6 +37,9 @@ class Dashboard extends Component {
             <ProfileActions />
             <Experience experience={profile.experience} />
             <Education education={profile.education} />
+            <button className="btn btn-danger" onClick={this.deleteAccount}>
+              Account Delete
+            </button>
           </div>
         );
       } else {
@@ -72,5 +79,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { currentUserProfile }
+  { currentUserProfile, deleteAccount }
 )(Dashboard);
