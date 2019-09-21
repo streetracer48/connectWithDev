@@ -23,3 +23,5 @@ export const ADD_POST = "ADD_POST";
 export const ADD_COMMENT = "ADD_COMMENT";
 export const GET_POST = "GET_POST";
 export const DELETE_COMMENT = "DELETE_COMMENT";
+export const ACCOUNT_DELETE = "ACCOUNT_DELETE";
+export const CLEAR_ACCOUNT = "CLEAR_ACCOUNT";

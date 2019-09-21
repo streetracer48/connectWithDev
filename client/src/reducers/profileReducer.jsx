@@ -4,7 +4,8 @@ import {
   PROFILE_LOADING_START,
   UPDATE_PROFILE,
   GET_PROFILES,
-  ADD_POST
+  ACCOUNT_DELETE,
+  CLEAR_ACCOUNT
 } from "../actions/types";
 
 const initialState = {
@@ -33,6 +34,13 @@ export default function(state = initialState, action) {
       return {
         ...state,
         profiles: payload,
+        loading: false
+      };
+
+    case CLEAR_ACCOUNT:
+      return {
+        profile: null,
+        profiles: null,
         loading: false
       };
 

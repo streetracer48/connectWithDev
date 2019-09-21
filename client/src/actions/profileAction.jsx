@@ -4,7 +4,9 @@ import {
   GET_PROFILES,
   PROFILE_ERROR,
   PROFILE_LOADING_START,
-  UPDATE_PROFILE
+  UPDATE_PROFILE,
+  ACCOUNT_DELETE,
+  CLEAR_ACCOUNT
 } from "./types";
 import { setAlert } from "./alert";
 
@@ -248,5 +250,38 @@ export const getProfiles = () => async dispatch => {
       type: PROFILE_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
     });
+  }
+};
+
+export const deleteAccount = () => async dispatch => {
+  if (window.confirm("Are you sure? this can not undone")) {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
+
+      const res = await axios.delete("/api/profile", config);
+      dispatch({
+        type: CLEAR_ACCOUNT
+      });
+      dispatch({
+        type: ACCOUNT_DELETE
+      });
+
+      dispatch(setAlert("Account deleted successfully", "success"));
+    } catch (err) {
+      const errors = err.response.data.errors;
+
+      if (errors) {
+        errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
+      }
+
+      dispatch({
+        type: PROFILE_ERROR,
+        payload: { msg: err.response.statusText, status: err.response.status }
+      });
+    }
   }
 };
