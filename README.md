@@ -2,4 +2,4 @@
 
 ## Feature
 - `Developer list  page,`
-<img src="bug.png" width="800" height="400">
+<img src="bug.png" width="900" height="800">
